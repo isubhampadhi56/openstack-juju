@@ -1,0 +1,984 @@
+series: focal
+applications:
+  ceph-mon:
+    charm: cs:ceph-mon
+    channel: stable
+    revision: 62
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    options:
+      expected-osd-count: 3
+      monitor-count: 3
+      source: cloud:focal-xena
+    annotations:
+      gui-x: "790"
+      gui-y: "1540"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      bootstrap-source: admin-network
+      client: admin-network
+      cluster: admin-network
+      dashboard: admin-network
+      mds: admin-network
+      mon: admin-network
+      nrpe-external-master: admin-network
+      osd: admin-network
+      prometheus: admin-network
+      public: admin-network
+      radosgw: admin-network
+      rbd-mirror: admin-network
+  ceph-osd:
+    charm: cs:ceph-osd
+    channel: stable
+    revision: 316
+    num_units: 3
+    to:
+    - "0"
+    - "1"
+    - "2"
+    options:
+      osd-devices: /dev/sdb
+      source: cloud:focal-xena
+    annotations:
+      gui-x: "1065"
+      gui-y: "1540"
+    bindings:
+      "": admin-network
+      cluster: admin-network
+      mon: admin-network
+      nrpe-external-master: admin-network
+      public: admin-network
+      secrets-storage: admin-network
+  ceph-radosgw:
+    charm: cs:ceph-radosgw
+    channel: stable
+    revision: 300
+    num_units: 3
+    to:
+    - lxd:3
+    - lxd:4
+    - lxd:5
+    options:
+      os-admin-hostname: storage.clab.iiit.in
+      os-internal-hostname: storage.clab.iiit.in
+      os-public-hostname: storage.clab.iiit.in
+      source: cloud:focal-xena
+      vip: 10.0.2.10
+    annotations:
+      gui-x: "850"
+      gui-y: "900"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      certificates: admin-network
+      cluster: admin-network
+      gateway: admin-network
+      ha: admin-network
+      identity-service: admin-network
+      internal: admin-network
+      master: admin-network
+      mon: admin-network
+      nrpe-external-master: admin-network
+      object-store: admin-network
+      public: admin-network
+      radosgw-user: admin-network
+      slave: admin-network
+  ceph-radosgw-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "975.2022857666016"
+      gui-y: "861.4601440429688"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  cinder:
+    charm: cs:cinder
+    channel: stable
+    revision: 319
+    resources:
+      policyd-override: 0
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    options:
+      block-device: None
+      glance-api-version: 2
+      openstack-origin: cloud:focal-xena
+      os-admin-hostname: cinder.clab.iiit.in
+      os-internal-hostname: cinder.clab.iiit.in
+      os-public-hostname: cinder.clab.iiit.in
+      vip: 10.0.2.11
+      worker-multiplier: 0.25
+    annotations:
+      gui-x: "980"
+      gui-y: "1270"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      amqp: admin-network
+      backup-backend: admin-network
+      ceph: admin-network
+      certificates: admin-network
+      cinder-volume-service: admin-network
+      cluster: admin-network
+      ha: admin-network
+      identity-service: admin-network
+      image-service: admin-network
+      internal: admin-network
+      nrpe-external-master: admin-network
+      public: admin-network
+      shared-db: admin-network
+      storage-backend: admin-network
+  cinder-ceph:
+    charm: cs:cinder-ceph
+    channel: stable
+    revision: 268
+    annotations:
+      gui-x: "1120"
+      gui-y: "1400"
+    bindings:
+      "": admin-network
+      ceph: admin-network
+      ceph-access: admin-network
+      ceph-replication-device: admin-network
+      juju-info: admin-network
+      storage-backend: admin-network
+  cinder-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "1097.0257568359375"
+      gui-y: "1207.35888671875"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  cinder-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "900"
+      gui-y: "1400"
+    bindings:
+      "": alpha
+      certificates: alpha
+      db-router: alpha
+      juju-info: alpha
+      shared-db: alpha
+  glance:
+    charm: cs:glance
+    channel: stable
+    revision: 313
+    resources:
+      policyd-override: 0
+    num_units: 3
+    to:
+    - lxd:3
+    - lxd:4
+    - lxd:5
+    options:
+      openstack-origin: cloud:focal-xena
+      os-admin-hostname: glance.clab.iiit.in
+      os-internal-hostname: glance.clab.iiit.in
+      os-public-hostname: glance.clab.iiit.in
+      vip: 10.0.2.22
+      worker-multiplier: 0.25
+    annotations:
+      gui-x: "-230"
+      gui-y: "1270"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      amqp: admin-network
+      ceph: admin-network
+      certificates: admin-network
+      cinder-volume-service: admin-network
+      cluster: admin-network
+      ha: admin-network
+      identity-service: admin-network
+      image-service: admin-network
+      internal: admin-network
+      nrpe-external-master: admin-network
+      object-store: admin-network
+      public: admin-network
+      shared-db: admin-network
+      storage-backend: admin-network
+  glance-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "-134.58247900009155"
+      gui-y: "1207.35888671875"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  glance-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "-290"
+      gui-y: "1400"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      db-router: admin-network
+      juju-info: admin-network
+      shared-db: admin-network
+  glance-simplestreams-sync:
+    charm: cs:glance-simplestreams-sync
+    channel: stable
+    revision: 47
+    num_units: 1
+    to:
+    - lxd:5
+    options:
+      run: true
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      identity-service: admin-network
+      image-modifier: admin-network
+      nrpe-external-master: admin-network
+      simplestreams-image-service: admin-network
+  keystone:
+    charm: cs:keystone
+    channel: stable
+    revision: 330
+    resources:
+      policyd-override: 0
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    options:
+      openstack-origin: cloud:focal-xena
+      os-admin-hostname: keystone.clab.iiit.in
+      os-internal-hostname: keystone.clab.iiit.in
+      os-public-hostname: keystone.clab.iiit.in
+      vip: 10.0.2.23
+      worker-multiplier: 0.25
+    annotations:
+      gui-x: "300"
+      gui-y: "1270"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      certificates: admin-network
+      cluster: admin-network
+      domain-backend: admin-network
+      ha: admin-network
+      identity-admin: admin-network
+      identity-credentials: admin-network
+      identity-notifications: admin-network
+      identity-service: admin-network
+      internal: admin-network
+      keystone-fid-service-provider: admin-network
+      keystone-middleware: admin-network
+      nrpe-external-master: admin-network
+      public: admin-network
+      shared-db: admin-network
+      websso-trusted-dashboard: admin-network
+  keystone-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "416.79443359375"
+      gui-y: "1231.331787109375"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  keystone-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "230"
+      gui-y: "1400"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      db-router: admin-network
+      juju-info: admin-network
+      shared-db: admin-network
+  memcached:
+    charm: cs:memcached
+    channel: stable
+    revision: 34
+    num_units: 2
+    to:
+    - lxd:3
+    - lxd:4
+    bindings:
+      "": admin-network
+      cache: admin-network
+      cluster: admin-network
+      local-monitors: admin-network
+      monitors: admin-network
+      munin: admin-network
+      nrpe-external-master: admin-network
+  mysql-innodb-cluster:
+    charm: cs:mysql-innodb-cluster
+    channel: stable
+    revision: 15
+    resources:
+      mysql-shell: 0
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    annotations:
+      gui-x: "535"
+      gui-y: "1550"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      cluster: admin-network
+      coordinator: admin-network
+      db-router: admin-network
+      shared-db: admin-network
+  neutron-api:
+    charm: cs:neutron-api
+    channel: stable
+    revision: 304
+    resources:
+      policyd-override: 0
+    num_units: 3
+    to:
+    - lxd:3
+    - lxd:4
+    - lxd:5
+    options:
+      enable-ml2-port-security: true
+      flat-network-providers: physnet1
+      neutron-security-groups: true
+      openstack-origin: cloud:focal-xena
+      os-admin-hostname: neutron-api.clab.iiit.in
+      os-internal-hostname: neutron-api.clab.iiit.in
+      os-public-hostname: neutron-api.clab.iiit.in
+      vip: 10.0.2.24
+      worker-multiplier: 0.25
+    annotations:
+      gui-x: "580"
+      gui-y: "1270"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      amqp: admin-network
+      certificates: admin-network
+      cluster: admin-network
+      etcd-proxy: admin-network
+      external-dns: admin-network
+      ha: admin-network
+      identity-service: admin-network
+      infoblox-neutron: admin-network
+      internal: admin-network
+      midonet: admin-network
+      neutron-api: admin-network
+      neutron-load-balancer: admin-network
+      neutron-plugin-api: admin-network
+      neutron-plugin-api-subordinate: admin-network
+      nrpe-external-master: admin-network
+      public: admin-network
+      shared-db: admin-network
+      vsd-rest-api: admin-network
+  neutron-api-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "689.4863891601562"
+      gui-y: "1237.3250732421875"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  neutron-api-plugin-ovn:
+    charm: cs:neutron-api-plugin-ovn
+    channel: stable
+    revision: 10
+    annotations:
+      gui-x: "690"
+      gui-y: "1385"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      container: admin-network
+      neutron-plugin: admin-network
+      ovsdb-cms: admin-network
+  neutron-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "505"
+      gui-y: "1385"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      db-router: admin-network
+      juju-info: admin-network
+      shared-db: admin-network
+  nova-cloud-controller:
+    charm: cs:nova-cloud-controller
+    channel: stable
+    revision: 363
+    resources:
+      policyd-override: 0
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    options:
+      console-access-protocol: spice
+      network-manager: Neutron
+      openstack-origin: cloud:focal-xena
+      os-admin-hostname: compute.clab.iiit.in
+      os-internal-hostname: compute.clab.iiit.in
+      os-public-hostname: compute.clab.iiit.in
+      vip: 10.0.2.25
+      worker-multiplier: 0.25
+    annotations:
+      gui-x: "35"
+      gui-y: "1270"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      amqp: admin-network
+      amqp-cell: admin-network
+      certificates: admin-network
+      cinder-volume-service: admin-network
+      cloud-compute: admin-network
+      cloud-controller: admin-network
+      cluster: admin-network
+      ha: admin-network
+      identity-service: admin-network
+      image-service: admin-network
+      internal: admin-network
+      memcache: admin-network
+      neutron-api: admin-network
+      nova-cell-api: admin-network
+      nova-vmware: admin-network
+      nrpe-external-master: admin-network
+      placement: admin-network
+      public: admin-network
+      quantum-network-service: admin-network
+      shared-db: admin-network
+      shared-db-cell: admin-network
+  nova-cloud-controller-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "147.09925842285156"
+      gui-y: "1222.342041015625"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  nova-compute:
+    charm: cs:nova-compute
+    channel: stable
+    revision: 337
+    num_units: 6
+    to:
+    - "0"
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+    options:
+      config-flags: default_ephemeral_format=ext4
+      customize-failure-domain: true
+      enable-live-migration: true
+      enable-resize: true
+      libvirt-image-backend: rbd
+      migration-auth-type: ssh
+      openstack-origin: cloud:focal-xena
+      rbd-pool: cinder-ceph
+    annotations:
+      gui-x: "190"
+      gui-y: "890"
+    bindings:
+      "": admin-network
+      amqp: admin-network
+      ceph: admin-network
+      ceph-access: admin-network
+      cloud-compute: admin-network
+      cloud-credentials: admin-network
+      compute-peer: admin-network
+      ephemeral-backend: admin-network
+      image-service: admin-network
+      internal: admin-network
+      ironic-api: admin-network
+      lxd: admin-network
+      migration: admin-network
+      neutron-plugin: admin-network
+      nova-ceilometer: admin-network
+      nrpe-external-master: admin-network
+      secrets-storage: admin-network
+  nova-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "-30"
+      gui-y: "1385"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      db-router: admin-network
+      juju-info: admin-network
+      shared-db: admin-network
+  ntp:
+    charm: cs:ntp
+    channel: stable
+    revision: 47
+    annotations:
+      gui-x: "315"
+      gui-y: "1030"
+    bindings:
+      "": admin-network
+      juju-info: admin-network
+      master: admin-network
+      nrpe-external-master: admin-network
+      ntp-peers: admin-network
+      ntpmaster: admin-network
+  openstack-dashboard:
+    charm: cs:openstack-dashboard
+    channel: stable
+    revision: 318
+    resources:
+      policyd-override: 0
+      theme: 0
+    num_units: 3
+    to:
+    - lxd:3
+    - lxd:4
+    - lxd:5
+    options:
+      default-create-volume: true
+      default-theme: material
+      enforce-ssl: true
+      openstack-origin: cloud:focal-xena
+      os-public-hostname: openstack.clab.iiit.in
+      password-retrieve: true
+      vip: 10.0.0.26
+    annotations:
+      gui-x: "585"
+      gui-y: "900"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      cluster: admin-network
+      dashboard-plugin: admin-network
+      ha: admin-network
+      identity-service: admin-network
+      nrpe-external-master: admin-network
+      public: admin-network
+      shared-db: admin-network
+      website: admin-network
+      websso-fid-service-provider: admin-network
+      websso-trusted-dashboard: admin-network
+  openstack-dashboard-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "686.48974609375"
+      gui-y: "856.7550659179688"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  openstack-dashboard-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "510"
+      gui-y: "1030"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      db-router: admin-network
+      juju-info: admin-network
+      shared-db: admin-network
+  ovn-central:
+    charm: cs:ovn-central
+    channel: stable
+    revision: 16
+    num_units: 3
+    to:
+    - lxd:3
+    - lxd:4
+    - lxd:5
+    options:
+      source: cloud:focal-xena
+    annotations:
+      gui-x: "70"
+      gui-y: "1550"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      nrpe-external-master: admin-network
+      ovsdb: admin-network
+      ovsdb-cms: admin-network
+      ovsdb-peer: admin-network
+      ovsdb-server: admin-network
+  ovn-chassis:
+    charm: cs:ovn-chassis
+    channel: stable
+    revision: 21
+    options:
+      bridge-interface-mappings: br-ex:eno2
+      ovn-bridge-mappings: physnet1:br-ex
+    annotations:
+      gui-x: "120"
+      gui-y: "1030"
+    bindings:
+      "": admin-network
+      amqp: admin-network
+      certificates: admin-network
+      data: admin-network
+      juju-info: admin-network
+      nova-compute: admin-network
+      nrpe-external-master: admin-network
+      ovsdb: admin-network
+      ovsdb-subordinate: admin-network
+  placement:
+    charm: cs:placement
+    channel: stable
+    revision: 32
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    options:
+      openstack-origin: cloud:focal-xena
+      os-admin-hostname: placement.clab.iiit.in
+      os-internal-hostname: placement.clab.iiit.in
+      os-public-hostname: placement.clab.iiit.in
+      vip: 10.0.2.27
+      worker-multiplier: 0.25
+    annotations:
+      gui-x: "1320"
+      gui-y: "1270"
+    bindings:
+      "": admin-network
+      admin: admin-network
+      amqp: admin-network
+      certificates: admin-network
+      cluster: admin-network
+      ha: admin-network
+      identity-service: admin-network
+      internal: admin-network
+      placement: admin-network
+      public: admin-network
+      shared-db: admin-network
+  placement-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    annotations:
+      gui-x: "1426.066650390625"
+      gui-y: "1230.1529541015625"
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  placement-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "1320"
+      gui-y: "1385"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      db-router: admin-network
+      juju-info: admin-network
+      shared-db: admin-network
+  rabbitmq-server:
+    charm: cs:rabbitmq-server
+    channel: stable
+    revision: 118
+    num_units: 3
+    to:
+    - lxd:3
+    - lxd:4
+    - lxd:5
+    annotations:
+      gui-x: "300"
+      gui-y: "1550"
+    bindings:
+      "": admin-network
+      amqp: admin-network
+      certificates: admin-network
+      cluster: admin-network
+      ha: admin-network
+      nrpe-external-master: admin-network
+  vault:
+    charm: cs:vault
+    channel: stable
+    revision: 54
+    resources:
+      core: 0
+      vault: 0
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    options:
+      vip: 10.0.2.40
+    annotations:
+      gui-x: "1610"
+      gui-y: "1430"
+    bindings:
+      "": admin-network
+      access: admin-network
+      certificates: admin-network
+      cluster: admin-network
+      db: admin-network
+      etcd: admin-network
+      external: admin-network
+      ha: admin-network
+      lb-provider: admin-network
+      nrpe-external-master: admin-network
+      secrets: admin-network
+      shared-db: admin-network
+  vault-hacluster:
+    charm: cs:hacluster
+    channel: stable
+    revision: 81
+    bindings:
+      "": admin-network
+      ha: admin-network
+      hanode: admin-network
+      juju-info: admin-network
+      nrpe-external-master: admin-network
+      pacemaker-remote: admin-network
+      peer-availability: admin-network
+  vault-mysql-router:
+    charm: cs:mysql-router
+    channel: stable
+    revision: 15
+    annotations:
+      gui-x: "1535"
+      gui-y: "1560"
+    bindings:
+      "": admin-network
+      certificates: admin-network
+      db-router: admin-network
+      juju-info: admin-network
+      shared-db: admin-network
+machines:
+  "0":
+    constraints: tags=ceph
+  "1":
+    constraints: tags=ceph
+  "2":
+    constraints: tags=ceph
+  "3":
+    constraints: tags=openstack
+  "4":
+    constraints: tags=openstack
+  "5":
+    constraints: tags=openstack
+relations:
+- - nova-compute:amqp
+  - rabbitmq-server:amqp
+- - nova-cloud-controller:identity-service
+  - keystone:identity-service
+- - glance:identity-service
+  - keystone:identity-service
+- - neutron-api:identity-service
+  - keystone:identity-service
+- - neutron-api:amqp
+  - rabbitmq-server:amqp
+- - glance:amqp
+  - rabbitmq-server:amqp
+- - nova-cloud-controller:image-service
+  - glance:image-service
+- - nova-compute:image-service
+  - glance:image-service
+- - nova-cloud-controller:cloud-compute
+  - nova-compute:cloud-compute
+- - nova-cloud-controller:amqp
+  - rabbitmq-server:amqp
+- - openstack-dashboard:identity-service
+  - keystone:identity-service
+- - openstack-dashboard-hacluster:ha
+  - openstack-dashboard:ha
+- - nova-cloud-controller:neutron-api
+  - neutron-api:neutron-api
+- - cinder:image-service
+  - glance:image-service
+- - cinder:amqp
+  - rabbitmq-server:amqp
+- - cinder:identity-service
+  - keystone:identity-service
+- - cinder:cinder-volume-service
+  - nova-cloud-controller:cinder-volume-service
+- - cinder-ceph:storage-backend
+  - cinder:storage-backend
+- - ceph-mon:client
+  - nova-compute:ceph
+- - nova-compute:ceph-access
+  - cinder-ceph:ceph-access
+- - ceph-mon:client
+  - cinder-ceph:ceph
+- - ceph-mon:client
+  - glance:ceph
+- - ceph-osd:mon
+  - ceph-mon:osd
+- - ntp:juju-info
+  - nova-compute:juju-info
+- - ceph-radosgw:mon
+  - ceph-mon:radosgw
+- - ceph-radosgw:identity-service
+  - keystone:identity-service
+- - placement:identity-service
+  - keystone:identity-service
+- - placement:placement
+  - nova-cloud-controller:placement
+- - keystone:shared-db
+  - keystone-mysql-router:shared-db
+- - cinder:shared-db
+  - cinder-mysql-router:shared-db
+- - glance:shared-db
+  - glance-mysql-router:shared-db
+- - nova-cloud-controller:shared-db
+  - nova-mysql-router:shared-db
+- - neutron-api:shared-db
+  - neutron-mysql-router:shared-db
+- - openstack-dashboard:shared-db
+  - openstack-dashboard-mysql-router:shared-db
+- - placement:shared-db
+  - placement-mysql-router:shared-db
+- - vault:shared-db
+  - vault-mysql-router:shared-db
+- - keystone-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - cinder-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - nova-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - glance-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - neutron-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - openstack-dashboard-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - placement-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - vault-mysql-router:db-router
+  - mysql-innodb-cluster:db-router
+- - neutron-api-plugin-ovn:neutron-plugin
+  - neutron-api:neutron-plugin-api-subordinate
+- - neutron-api-hacluster:ha
+  - neutron-api:ha
+- - ovn-central:certificates
+  - vault:certificates
+- - ovn-central:ovsdb-cms
+  - neutron-api-plugin-ovn:ovsdb-cms
+- - neutron-api:certificates
+  - vault:certificates
+- - ovn-chassis:nova-compute
+  - nova-compute:neutron-plugin
+- - ovn-chassis:certificates
+  - vault:certificates
+- - ovn-chassis:ovsdb
+  - ovn-central:ovsdb
+- - vault:certificates
+  - neutron-api-plugin-ovn:certificates
+- - vault:certificates
+  - cinder:certificates
+- - vault:certificates
+  - glance:certificates
+- - vault:certificates
+  - keystone:certificates
+- - vault:certificates
+  - nova-cloud-controller:certificates
+- - vault:certificates
+  - openstack-dashboard:certificates
+- - vault:certificates
+  - placement:certificates
+- - vault:certificates
+  - ceph-radosgw:certificates
+- - vault:certificates
+  - mysql-innodb-cluster:certificates
+- - keystone-hacluster:ha
+  - keystone:ha
+- - glance-simplestreams-sync:certificates
+  - vault:certificates
+- - glance-simplestreams-sync:identity-service
+  - keystone:identity-service
+- - nova-cloud-controller-hacluster:ha
+  - nova-cloud-controller:ha
+- - nova-cloud-controller:memcache
+  - memcached:cache
+- - ceph-radosgw-hacluster:ha
+  - ceph-radosgw:ha
+- - cinder-hacluster:ha
+  - cinder:ha
+- - glance-hacluster:ha
+  - glance:ha
+- - placement-hacluster:ha
+  - placement:ha
+- - vault-hacluster:ha
+  - vault:ha
